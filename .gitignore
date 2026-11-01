@@ -1,0 +1,9 @@
+node_modules/
+out/
+tmp/
+*.log
+voice/voice.wav
+audio-pipeline/_cache/
+audio-pipeline/mix.wav
+audio-pipeline/stem_*.wav
+audio-pipeline/cues.md
