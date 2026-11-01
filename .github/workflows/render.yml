@@ -20,7 +20,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install ffmpeg
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg mesa-vulkan-drivers
 
       - name: Build soundtrack from source
         run: |
@@ -35,8 +35,8 @@ jobs:
       - name: Ensure headless browser
         run: npx remotion browser ensure
 
-      - name: Render silent video (720p, SwiftShader)
-        run: npx remotion render src/index.ts EiffelShort out/eiffel_720_silent.mp4 --scale=0.6667 --gl=swiftshader --concurrency=4
+      - name: Render silent video (720p, ANGLE)
+        run: npx remotion render src/index.ts EiffelShort out/eiffel_720_silent.mp4 --scale=0.6667 --gl=angle --concurrency=4
 
       - name: Mux final audio
         run: |
