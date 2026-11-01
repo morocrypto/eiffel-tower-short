@@ -1,0 +1,22 @@
+{
+  "name": "cartoon-3d-shorts",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "remotion render"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^9.0.0",
+    "@react-three/postprocessing": "^3.0.0",
+    "@remotion/cli": "^4.0.0",
+    "@remotion/three": "^4.0.0",
+    "postprocessing": "^6.36.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "^4.0.0",
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}
