@@ -1,0 +1,48 @@
+name: Render EiffelShort 720p
+
+on:
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build soundtrack from source
+        run: |
+          pip install numpy scipy
+          base64 -d voice/voice.wav.b64 > voice/voice.wav
+          python3 audio-pipeline/mix.py
+          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 audio-pipeline/mix.wav
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Ensure headless browser
+        run: npx remotion browser ensure
+
+      - name: Render silent video (720p, SwiftShader)
+        run: npx remotion render src/index.ts EiffelShort out/eiffel_720_silent.mp4 --scale=0.6667 --gl=swiftshader --concurrency=4
+
+      - name: Mux final audio
+        run: |
+          ffmpeg -y -i out/eiffel_720_silent.mp4 -i audio-pipeline/mix.wav -c:v copy -c:a aac -b:a 192k -shortest out/eiffel_720_final.mp4
+          ffprobe -v error -show_entries format=duration,size -of default=noprint_wrappers=1 out/eiffel_720_final.mp4
+
+      - name: Upload final video
+        uses: actions/upload-artifact@v4
+        with:
+          name: eiffel-720p-final
+          path: out/eiffel_720_final.mp4
+          retention-days: 7
